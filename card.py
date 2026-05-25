@@ -7,8 +7,8 @@ class Card:
         self.value = value
         self.suit = suit
 
-        def __str__(self):
-           return self.name
+    def __str__(self):
+        return self.name
         
 class Player:
     def __init__(self, name):
