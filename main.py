@@ -6,6 +6,11 @@ class Mainloop:
     def __init__ (self, parent):
         self.rule_screen_frame = Frame(parent)
         self.main_frame = Frame(parent)
+        self.game_frame = Frame(parent)
+
+        self.players = []
+        self.current_players = 0
+
         
 
         self.title_label = Label(self.main_frame, text="| Sabacc |", font=("Arial", 16))
@@ -22,6 +27,24 @@ class Mainloop:
 
         self.display_rules = ScrolledText(self.rule_screen_frame, width = 60, height = 20, state = 'disabled', wrap = 'word')
         self.display_rules.grid(row = 6, columnspan = 2)
+
+        self.new_game_button = Button(self.main_frame, text = "| Start Game |", command=start_game())
+        self.new_game_button.grid(row=2, column=0, pady=5)
+
+        self.player_label = Label(self.game_frame, text="", font=("Arial", 16))
+        self.player_label.grid(row=0, column=0, pady=10)
+
+        self.hand_label = Label(self.game_frame, text="", font=("Arial", 12))
+        self.hand_label.grid(row=1, column=0, pady=10)
+
+        self.draw_card_button = Button(self.game_frame, text="Draw Card", command=draw_card)
+        self.draw_card_button.grid(row=2, column=0)
+        
+        self.end_turn_button = Button(self.game_frame, text="End Turn", command=self.next_player)
+        self.end_turn_button.grid(row=3, column=0)
+
+
+
 
         
 
