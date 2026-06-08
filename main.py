@@ -6,6 +6,7 @@ class Mainloop:
     def __init__ (self, parent):
         self.rule_screen_frame = Frame(parent)
         self.main_frame = Frame(parent)
+        
 
         self.title_label = Label(self.main_frame, text="| Sabacc |", font=("Arial", 16))
         self.title_label.grid(row=0, column=0, pady=10)
@@ -21,6 +22,8 @@ class Mainloop:
 
         self.display_rules = ScrolledText(self.rule_screen_frame, width = 60, height = 20, state = 'disabled', wrap = 'word')
         self.display_rules.grid(row = 6, columnspan = 2)
+
+        
 
         self.display_rules.configure(state = 'normal')
         self.display_rules.insert(END, """Step 1:
@@ -76,6 +79,7 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
         self.main_frame.grid_forget()
         self.rule_screen_frame.grid_forget()
         frame.grid()
+
 
     
 if __name__ == "__main__":

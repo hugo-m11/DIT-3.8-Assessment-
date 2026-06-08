@@ -1,4 +1,3 @@
-from tkinter import*
 import random
 
 class Card:
@@ -9,31 +8,31 @@ class Card:
 
     def __str__(self):
         return self.name
-        
+
 class Player:
     def __init__(self, name):
         self.name = name
         self.hand = []
+        self.credits = 100
 
     def draw(self):
         card = draw_card()
         if card:
             self.hand.append(card)
 
-    def show_hand(self):
-        for card in self.hand:
-            print(card)
+    def clear_hand(self):
+        self.hand.clear()
+
 
 deck = []
-
 
 suits = ["Flask", "Saber", "Stave", "Coin"]
 
 for suit in suits:
+
     for num in range(1, 12):
-# normal cards
         deck.append(Card(f"{num} of {suit}", num, suit))
-# face cards 
+
     deck.append(Card(f"{suit} Commander", 12, suit))
     deck.append(Card(f"{suit} Mistress", 13, suit))
     deck.append(Card(f"{suit} Master", 14, suit))
@@ -51,12 +50,11 @@ special_cards = [
     ("Star", -17)
 ]
 
-# adds two copies of each special card
 for name, value in special_cards:
-    for i in range(2):
+    for _ in range(2):
         deck.append(Card(name, value, "Special"))
 
-    
+
 def shuffle_deck():
     random.shuffle(deck)
 
@@ -66,7 +64,24 @@ def draw_card():
         return deck.pop()
     return None
 
-    
+
+def create_players(num_players):
+
+    players = []
+
+    for i in range(num_players):
+        players.append(Player(f"Player {i+1}"))
+
+    return players
+
+
+def deal_starting_hands(players):
+
+    shuffle_deck()
+
+    for player in players:
+        player.draw()
+        player.draw()
 
 
 
