@@ -28,7 +28,7 @@ class Mainloop:
         self.display_rules = ScrolledText(self.rule_screen_frame, width = 60, height = 20, state = 'disabled', wrap = 'word')
         self.display_rules.grid(row = 6, columnspan = 2)
 
-        self.new_game_button = Button(self.main_frame, text = "| Start Game |", command=start_game())
+        self.new_game_button = Button(self.main_frame, text = "| Start Game |", command=self.start_game)
         self.new_game_button.grid(row=2, column=0, pady=5)
 
         self.player_label = Label(self.game_frame, text="", font=("Arial", 16))
@@ -37,7 +37,7 @@ class Mainloop:
         self.hand_label = Label(self.game_frame, text="", font=("Arial", 12))
         self.hand_label.grid(row=1, column=0, pady=10)
 
-        self.draw_card_button = Button(self.game_frame, text="Draw Card", command=draw_card)
+        self.draw_card_button = Button(self.game_frame, text="Draw Card", command=card.draw_card)
         self.draw_card_button.grid(row=2, column=0)
         
         self.end_turn_button = Button(self.game_frame, text="End Turn", command=self.next_player)
@@ -102,6 +102,36 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
         self.main_frame.grid_forget()
         self.rule_screen_frame.grid_forget()
         frame.grid()
+
+    def start_game(self):
+        self.players = card.create_players(4)
+        card.deal_starting_hands(self.players)
+        self.current_player = 0
+        self.update_player_display()
+        self.switch_frame_rule(self.game_frame)
+
+    def update_player_display(self):
+
+        player = self.players[self.current_player]
+
+        self.player_label.config(text=f"{player.name}'s Turn" )
+        hand_text = ""
+        
+        for card in player.hand:
+            hand_text += str(card) + "\n"
+
+        self.hand_label.config(text=hand_text)
+
+    def next_player(self):
+
+        self.current_player += 1
+
+        if self.current_player >= len(self.players):
+            self.current_player = 0
+
+        self.update_player_display()
+
+
 
 
     
