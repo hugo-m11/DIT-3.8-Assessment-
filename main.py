@@ -43,11 +43,6 @@ class Mainloop:
         self.end_turn_button = Button(self.game_frame, text="End Turn", command=self.next_player)
         self.end_turn_button.grid(row=3, column=0)
 
-
-
-
-        
-
         self.display_rules.configure(state = 'normal')
         self.display_rules.insert(END, """Step 1:
 Choose a dealer. The person to the right of the dealer puts a blind into the hand pot. (In a two player game this would always be the dealer.) The blind is a previously agreed upon amount which must be paid at the start of each hand. The dealer rotates to the player on the left at the end of each round. The purpose of the blind is to ensure that there is always something to win in the hand pot, even if nobody bets.
