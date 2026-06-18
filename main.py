@@ -11,8 +11,6 @@ class Mainloop:
         self.players = []
         self.current_players = 0
 
-        
-
         self.title_label = Label(self.main_frame, text="| Sabacc |", font=("Arial", 16))
         self.title_label.grid(row=0, column=0, pady=10)
 
@@ -88,8 +86,6 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
 â€”-----------------------------------------------------------------------------------------------------------------------
 """ + "\n")
         self.display_rules.configure(state = 'disabled')
-
-
         # Start on main menu
         self.switch_frame_rule(self.main_frame)
        
@@ -125,10 +121,6 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
             self.current_player = 0
 
         self.update_player_display()
-
-
-
-
     
 if __name__ == "__main__":
 

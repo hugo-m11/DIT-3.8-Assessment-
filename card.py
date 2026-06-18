@@ -31,23 +31,22 @@ suits = ["Flask", "Saber", "Stave", "Coin"]
 for suit in suits:
 
     for num in range(1, 12):
-        deck.append(Card(f"{num} of {suit}", num, suit))
-
-    deck.append(Card(f"{suit} Commander", 12, suit))
-    deck.append(Card(f"{suit} Mistress", 13, suit))
-    deck.append(Card(f"{suit} Master", 14, suit))
-    deck.append(Card(f"Ace of {suit}", 15, suit))
+        deck.append(Card(f"{num} of {suit} | ({num})", num, suit))
+    deck.append(Card(f"Commander of {suit} | (12)", 12, suit))
+    deck.append(Card(f"Mistress of {suit} | (13)", 13, suit))
+    deck.append(Card(f"Master of {suit} | (14)", 14, suit))
+    deck.append(Card(f"Ace of {suit} | (15)", 15, suit))
 
 
 special_cards = [
-    ("Balance", -11),
-    ("Idiot", 0),
-    ("Endurance", -8),
-    ("Moderation", -14),
-    ("Evil One", -15),
-    ("Queen of Air and Darkness", -2),
-    ("Demise", -13),
-    ("Star", -17)
+    ("Balance | (-11)", -11),
+    ("Idiot | (0)", 0),
+    ("Endurance | (-8)", -8),
+    ("Moderation | (-14)", -14),
+    ("Evil One | (-15)", -15),
+    ("Queen of Air and Darkness | (-2)", -2),
+    ("Demise | (-13)", -13),
+    ("Star | (-17)", -17)
 ]
 
 for name, value in special_cards:
