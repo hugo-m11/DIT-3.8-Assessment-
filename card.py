@@ -14,6 +14,8 @@ class Player:
         self.name = name
         self.hand = []
         self.credits = 100
+        self.current_bet = 0
+        self.has_folded = False
 
     def draw(self):
         card = draw_card()
@@ -27,7 +29,6 @@ class Player:
         return sum(card.value for card in self.hand)
     
     def discard(self, card_index):
-        # Remove the card from hand and add to discard pile
         if 0 <= card_index < len(self.hand):
             discarded_card = self.hand.pop(card_index)
             discarded_cards.append(discarded_card)

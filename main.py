@@ -11,6 +11,10 @@ class Mainloop:
         self.players = []
         self.current_players = 0
 
+        self.pot = 0
+        self.current_highest_bet = 0
+        self.game_phase = "Betting"
+
         self.title_label = Label(self.main_frame, text="| Sabacc |", font=("Arial", 16))
         self.title_label.grid(row=0, column=3, pady=10)
 
@@ -41,7 +45,7 @@ class Mainloop:
         self.end_turn_button = Button(self.game_frame, text="End Turn", command=self.next_player)
         self.end_turn_button.grid(row=3, column=3)
 
-        self.discard_button = Button(self.game_frame, text="Discard",)
+        self.discard_button = Button(self.game_frame, text="Discard", command=self.discard)
         self.discard_button.grid(row=4, column = 3)
 
         self.bet_button = Button(self.game_frame, text="Bet",)
@@ -140,6 +144,7 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
         player = self.players[self.current_player]
         player.draw()
         self.update_player_display() 
+
     
 if __name__ == "__main__":
 
