@@ -23,8 +23,18 @@ class Player:
     def clear_hand(self):
         self.hand.clear()
 
+    def get_hand_value(self):
+        return sum(card.value for card in self.hand)
+    
+    def discard(self, card_index):
+        # Remove the card from hand and add to discard pile
+        if 0 <= card_index < len(self.hand):
+            discarded_card = self.hand.pop(card_index)
+            discarded_cards.append(discarded_card)
+
 
 deck = []
+discarded_cards = []
 
 suits = ["Flask", "Saber", "Stave", "Coin"]
 
