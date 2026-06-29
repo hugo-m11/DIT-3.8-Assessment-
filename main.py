@@ -36,8 +36,11 @@ class Mainloop:
         self.player_label = Label(self.game_frame, text="", font=("Arial", 16))
         self.player_label.grid(row=0, column=3, pady=10)
 
-        self.hand_label = Label(self.game_frame, text="", font=("Arial", 12))
-        self.hand_label.grid(row=1, column=0, pady=10)
+        #self.hand_label = Label(self.game_frame, text="", font=("Arial", 12))
+        #self.hand_label.grid(row=1, column=0, pady=10)
+
+        self.hand_listbox = Listbox(self.game_frame, font=("Arial", 12), width=40, height=10)
+        self.hand_listbox.grid(row=1, column=0, pady=10)
 
         self.draw_card_button = Button(self.game_frame, text="Draw Card", command=self.player_draw_card)
         self.draw_card_button.grid(row=2, column=3)
@@ -45,7 +48,7 @@ class Mainloop:
         self.end_turn_button = Button(self.game_frame, text="End Turn", command=self.next_player)
         self.end_turn_button.grid(row=3, column=3)
 
-        self.discard_button = Button(self.game_frame, text="Discard", command=self.discard)
+        self.discard_button = Button(self.game_frame, text="Discard")
         self.discard_button.grid(row=4, column = 3)
 
         self.bet_button = Button(self.game_frame, text="Bet",)
@@ -123,13 +126,17 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
 
         player = self.players[self.current_player]
 
-        self.player_label.config(text=f"{player.name}'s Turn" )
-        hand_text = ""
+        self.player_label.config(text=f"{player.name}'s Turn | Credits: {player.credits}")
         
+        # Clear the listbox so it doesn't duplicate cards
+        self.hand_listbox.delete(0, END)
+        
+        # Insert each card into the listbox
         for card in player.hand:
-            hand_text += str(card) + "\n"
-
-        self.hand_label.config(text=hand_text)
+            self.hand_listbox.insert(END, str(card))
+            
+        # Optional: You can still show the total hand value in a separate label
+        # if you want to add a self.hand_value_label to your __init__!
 
     def next_player(self):
 
@@ -151,5 +158,5 @@ if __name__ == "__main__":
     root = Tk()
     gui = Mainloop(root)
     root.title("Sabbac")
-    root.geometry("400x400+200+200")
+    root.geometry("600x600+200+200")
     root.mainloop()
