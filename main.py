@@ -4,56 +4,97 @@ import card
 
 class Mainloop:
     def __init__ (self, parent):
+
+        #sets up the required windows 
         self.rule_screen_frame = Frame(parent)
         self.main_frame = Frame(parent)
         self.game_frame = Frame(parent)
+        self.betting_frame = Frame(self.game_frame)
+      
 
+
+        #list where the players are set 
         self.players = []
-        self.current_players = 0
 
+        #default value that gets changed in card.py 
+        self.current_players = 0
+        
+        #sets the vaule of the pot (betting reward)
         self.pot = 0
+        
+        #bet made by player
         self.current_highest_bet = 0
         self.game_phase = "Betting"
 
+
+        #title screen 
         self.title_label = Label(self.main_frame, text="| Sabacc |", font=("Arial", 16))
         self.title_label.grid(row=0, columns=3, pady=5)
 
+        #button that takse you to the rules 
         self.rules_button = Button(self.main_frame,text="| See Rules |", command=lambda: self.switch_frame_rule(self.rule_screen_frame))
         self.rules_button.grid(row=1, column=0, pady=5)
 
+        #title indicating that you are on the rules screen 
         self.rule_screen_title = Label(self.rule_screen_frame, text="| Rules |", font=("Arial", 16))
         self.rule_screen_title.grid(row=0, columnspan=3)
 
+        #button that takes you back to the main screen 
         self.exit_to_main_frame_button = Button(self.rule_screen_frame,text="| Back |", command=lambda: self.switch_frame_rule(self.main_frame))
         self.exit_to_main_frame_button.grid(row=1, columnspan=3)
 
+        #the widget that displays the rules 
         self.display_rules = ScrolledText(self.rule_screen_frame, width = 60, height = 20, state = 'disabled', wrap = 'word')
         self.display_rules.grid(row = 5, columnspan = 3, padx=30)
 
+        #button that stars a new game 
         self.new_game_button = Button(self.main_frame, text = "| Start Game |", command=self.start_game)
         self.new_game_button.grid(row=2, columns=3, pady=5)
 
+        #sets up the screen that displays individual players 
         self.player_label = Label(self.game_frame, text="", font=("Arial", 16))
         self.player_label.grid(row=0, column=3, pady=10)
 
         #self.hand_label = Label(self.game_frame, text="", font=("Arial", 12))
         #self.hand_label.grid(row=1, column=0, pady=10)
 
+        #displays the cards the player holds 
         self.hand_listbox = Listbox(self.game_frame, font=("Arial", 12), width=40, height=10)
         self.hand_listbox.grid(row=1, column=3, padx=110)
 
+        #sets up a button for drawing cards 
         self.draw_card_button = Button(self.game_frame, text="Draw Card", command=self.player_draw_card)
         self.draw_card_button.grid(row=2, column=3)
         
+        #sets up a button for ending turn to the next player
         self.end_turn_button = Button(self.game_frame, text="End Turn", command=self.next_player)
         self.end_turn_button.grid(row=3, column=3)
 
+        #sets up a button for discarding of the cards 
         self.discard_button = Button(self.game_frame, text="Discard", command=self.discard_selected)
         self.discard_button.grid(row=4, column = 3)
 
+        #sets up a button for betting 
         self.bet_button = Button(self.game_frame, text="Bet",)
         self.bet_button.grid(row=5, column=3)
 
+        self.check_button = Button(self.betting_frame, text="Check", command=self.check)
+        self.check_button.grid(row=0, column=0, padx=5)
+
+        self.fold_button = Button(self.betting_frame, text="Fold", command=self.fold)
+        self.fold_button.grid(row=0, column=1, padx=5)
+        
+        self.call_button = Button(self.betting_frame, text="Call", command=self.call)
+        self.call_button.grid(row=0, column=2, padx=5)
+
+        self.bet_entry = Entry(self.betting_frame, width=5)
+        self.bet_entry.grid(row=0, column=3, padx=5)
+
+        self.bet_button = Button(self.betting_frame, text="Bet/Raise", command=self.bet)
+        self.bet_button.grid(row=0, column=4, padx=5)
+
+
+        #what is displayed in the rules section 
         self.display_rules.configure(state = 'normal')
         self.display_rules.insert(END, """Step 1:
 Choose a dealer. The person to the right of the dealer puts a blind into the hand pot. (In a two player game this would always be the dealer.) The blind is a previously agreed upon amount which must be paid at the start of each hand. The dealer rotates to the player on the left at the end of each round. The purpose of the blind is to ensure that there is always something to win in the hand pot, even if nobody bets.
@@ -108,15 +149,21 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
 """ + "\n")
         self.display_rules.configure(state = 'disabled')
         # Start on main menu
+
+
         self.switch_frame_rule(self.main_frame)
        
+       #method for switching frames 
     def switch_frame_rule(self, frame):
         self.main_frame.grid_forget()
         self.rule_screen_frame.grid_forget()
         frame.grid()
 
+        #method for starting games 
     def start_game(self):
+        #creates four players 
         self.players = card.create_players(4)
+        #deals the starting hands 
         card.deal_starting_hands(self.players)
         self.current_player = 0
         self.update_player_display()
@@ -164,6 +211,35 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
             
             #refresh the screen so the discarded card disappears
             self.update_player_display()
+
+    def fold(self):
+        player = self.players[self.current_player]
+        player.has_folded = True
+        player.clear_hand() # Send their cards to the discard pile 
+        self.next_player()
+
+    
+    def check(self):
+        player = self.players[self.current_player]
+        
+        if player.current_bet == self.current_highest_bet:
+            #legal move, proceed to next player
+            self.next_player()
+        else:
+            print("You cannot check! You must call the highest bet or fold.")
+
+    def next_player(self):
+        self.current_player += 1
+
+        if self.current_player >= len(self.players):
+            self.current_player = 0
+
+        # skip players who have folded
+        if self.players[self.current_player].has_folded:
+            self.next_player() #recursively call to skip to the next
+            return
+            
+        self.update_player_display()
 
     
 if __name__ == "__main__":
