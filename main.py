@@ -16,22 +16,22 @@ class Mainloop:
         self.game_phase = "Betting"
 
         self.title_label = Label(self.main_frame, text="| Sabacc |", font=("Arial", 16))
-        self.title_label.grid(row=0, column=3, pady=10)
+        self.title_label.grid(row=0, columns=3, pady=5)
 
         self.rules_button = Button(self.main_frame,text="| See Rules |", command=lambda: self.switch_frame_rule(self.rule_screen_frame))
         self.rules_button.grid(row=1, column=0, pady=5)
 
         self.rule_screen_title = Label(self.rule_screen_frame, text="| Rules |", font=("Arial", 16))
-        self.rule_screen_title.grid(row=0, column=0)
+        self.rule_screen_title.grid(row=0, columnspan=3)
 
         self.exit_to_main_frame_button = Button(self.rule_screen_frame,text="| Back |", command=lambda: self.switch_frame_rule(self.main_frame))
-        self.exit_to_main_frame_button.grid(row=1, column=0)
+        self.exit_to_main_frame_button.grid(row=1, columnspan=3)
 
         self.display_rules = ScrolledText(self.rule_screen_frame, width = 60, height = 20, state = 'disabled', wrap = 'word')
-        self.display_rules.grid(row = 6, columnspan = 2)
+        self.display_rules.grid(row = 5, columnspan = 3, padx=30)
 
         self.new_game_button = Button(self.main_frame, text = "| Start Game |", command=self.start_game)
-        self.new_game_button.grid(row=2, column=3, pady=5)
+        self.new_game_button.grid(row=2, columns=3, pady=5)
 
         self.player_label = Label(self.game_frame, text="", font=("Arial", 16))
         self.player_label.grid(row=0, column=3, pady=10)
@@ -40,7 +40,7 @@ class Mainloop:
         #self.hand_label.grid(row=1, column=0, pady=10)
 
         self.hand_listbox = Listbox(self.game_frame, font=("Arial", 12), width=40, height=10)
-        self.hand_listbox.grid(row=1, column=0, pady=10)
+        self.hand_listbox.grid(row=1, column=3, padx=110)
 
         self.draw_card_button = Button(self.game_frame, text="Draw Card", command=self.player_draw_card)
         self.draw_card_button.grid(row=2, column=3)
@@ -48,7 +48,7 @@ class Mainloop:
         self.end_turn_button = Button(self.game_frame, text="End Turn", command=self.next_player)
         self.end_turn_button.grid(row=3, column=3)
 
-        self.discard_button = Button(self.game_frame, text="Discard")
+        self.discard_button = Button(self.game_frame, text="Discard", command=self.discard_selected)
         self.discard_button.grid(row=4, column = 3)
 
         self.bet_button = Button(self.game_frame, text="Bet",)
@@ -128,16 +128,13 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
 
         self.player_label.config(text=f"{player.name}'s Turn | Credits: {player.credits}")
         
-        # Clear the listbox so it doesn't duplicate cards
+        #clear the listbox so it doesn't duplicate cards
         self.hand_listbox.delete(0, END)
         
-        # Insert each card into the listbox
+        #insert each card into the listbox
         for card in player.hand:
             self.hand_listbox.insert(END, str(card))
             
-        # Optional: You can still show the total hand value in a separate label
-        # if you want to add a self.hand_value_label to your __init__!
-
     def next_player(self):
 
         self.current_player += 1
@@ -152,11 +149,27 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
         player.draw()
         self.update_player_display() 
 
+    def discard_selected(self):
+        #curselection() returns a tuple of the selected indices, e.g., (2,)
+        selection = self.hand_listbox.curselection()
+        
+        if selection:
+            #get the first (and only) selected index
+            index_to_discard = selection[0] 
+            
+            player = self.players[self.current_player]
+            
+            #use the discard method we added in card.py 
+            player.discard(index_to_discard) 
+            
+            #refresh the screen so the discarded card disappears
+            self.update_player_display()
+
     
 if __name__ == "__main__":
 
     root = Tk()
     gui = Mainloop(root)
     root.title("Sabbac")
-    root.geometry("600x600+200+200")
+    root.geometry("500x400+200+200")
     root.mainloop()
