@@ -23,6 +23,9 @@ class Player:
             self.hand.append(card)
 
     def clear_hand(self):
+        # Move all cards to the discard pile instead of just deleting them
+        global discarded_cards 
+        discarded_cards.extend(self.hand)
         self.hand.clear()
 
     def get_hand_value(self):
@@ -43,10 +46,10 @@ for suit in suits:
 
     for num in range(1, 12):
         deck.append(Card(f"{num} of {suit} | ({num})", num, suit))
-        deck.append(Card(f"Commander of {suit} | (12)", 12, suit))
-        deck.append(Card(f"Mistress of {suit} | (13)", 13, suit))
-        deck.append(Card(f"Master of {suit} | (14)", 14, suit))
-        deck.append(Card(f"Ace of {suit} | (15)", 15, suit))
+    deck.append(Card(f"Commander of {suit} | (12)", 12, suit))
+    deck.append(Card(f"Mistress of {suit} | (13)", 13, suit))
+    deck.append(Card(f"Master of {suit} | (14)", 14, suit))
+    deck.append(Card(f"Ace of {suit} | (15)", 15, suit))
 
 
 special_cards = [

@@ -10,6 +10,7 @@ class Mainloop:
         self.main_frame = Frame(parent)
         self.game_frame = Frame(parent)
         self.betting_frame = Frame(self.game_frame)
+        self.betting_frame.grid(row=6, column=3, pady=10)
       
 
 
@@ -73,10 +74,6 @@ class Mainloop:
         #sets up a button for discarding of the cards 
         self.discard_button = Button(self.game_frame, text="Discard", command=self.discard_selected)
         self.discard_button.grid(row=4, column = 3)
-
-        #sets up a button for betting 
-        self.bet_button = Button(self.game_frame, text="Bet",)
-        self.bet_button.grid(row=5, column=3)
 
         self.check_button = Button(self.betting_frame, text="Check", command=self.check)
         self.check_button.grid(row=0, column=0, padx=5)
@@ -169,27 +166,23 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
         self.update_player_display()
         self.switch_frame_rule(self.game_frame)
 
-    def update_player_display(self):
 
+    def update_player_display(self):
         player = self.players[self.current_player]
 
-        self.player_label.config(text=f"{player.name}'s Turn | Credits: {player.credits}")
+        # Update this label to show the Pot and the Current Bet to match
+        display_text = f"{player.name}'s Turn | Credits: {player.credits}\n"
+        display_text += f"Pot: {self.pot} | Current Bet to Call: {self.current_highest_bet}"
         
-        #clear the listbox so it doesn't duplicate cards
+        self.player_label.config(text=display_text)
+        
+        # Clear the listbox so it doesn't duplicate cards
         self.hand_listbox.delete(0, END)
         
-        #insert each card into the listbox
+        # Insert each card into the listbox
         for card in player.hand:
             self.hand_listbox.insert(END, str(card))
-            
-    def next_player(self):
 
-        self.current_player += 1
-
-        if self.current_player >= len(self.players):
-            self.current_player = 0
-
-        self.update_player_display()
 
     def player_draw_card(self):
         player = self.players[self.current_player]
@@ -240,6 +233,57 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
             return
             
         self.update_player_display()
+
+    def call(self):
+        player = self.players[self.current_player]
+
+        # Calculate how much the player needs to pay to match the highest bet
+        amount_to_call = self.current_highest_bet - player.current_bet
+
+        if amount_to_call > 0:
+            if player.credits >= amount_to_call:
+                player.credits -= amount_to_call
+                self.pot += amount_to_call
+                player.current_bet = self.current_highest_bet
+                self.next_player()
+            else:
+                # In a fully polished game, this is where "All-In" logic goes. 
+                # For now, we print a warning to the console.
+                print("Not enough credits to call!")
+        else:
+            print("No need to call, the bet is already matched. You can Check.")
+
+    
+    def bet(self):
+        player = self.players[self.current_player]
+        
+        # Grab the text from the entry box and ensure it is a valid number
+        try:
+            raise_amount = int(self.bet_entry.get())
+        except ValueError:
+            print("Please enter a valid whole number to bet.")
+            return
+
+        if raise_amount > 0:
+            # The player must pay enough to match the current bet, PLUS their raise
+            cost_to_player = (self.current_highest_bet - player.current_bet) + raise_amount
+            
+            if player.credits >= cost_to_player:
+                player.credits -= cost_to_player
+                self.pot += cost_to_player
+                
+                # Establish the new highest bet for the table
+                self.current_highest_bet += raise_amount
+                player.current_bet = self.current_highest_bet
+                
+                # Clear the entry box for the next player
+                self.bet_entry.delete(0, 'end')
+                
+                self.next_player()
+            else:
+                print("Not enough credits to make this bet/raise!")
+        else:
+            print("Your bet must be greater than 0.")
 
     
 if __name__ == "__main__":
