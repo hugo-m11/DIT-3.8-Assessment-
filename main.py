@@ -1,6 +1,8 @@
 from tkinter import*
 from tkinter.scrolledtext import*
 import card
+from tkinter import messagebox
+
 
 class Mainloop:
     def __init__ (self, parent):
@@ -219,7 +221,7 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
             #legal move, proceed to next player
             self.next_player()
         else:
-            print("You cannot check! You must call the highest bet or fold.")
+            messagebox.showinfo("", "You cannot check! You must call the highest bet or fold.")
 
     def next_player(self):
         self.current_player += 1
@@ -247,11 +249,9 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
                 player.current_bet = self.current_highest_bet
                 self.next_player()
             else:
-                # In a fully polished game, this is where "All-In" logic goes. 
-                # For now, we print a warning to the console.
-                print("Not enough credits to call!")
+                messagebox.showinfo("", "Not enough credits to call!")
         else:
-            print("No need to call, the bet is already matched. You can Check.")
+            messagebox.showinfo("", "No need to call, the bet is already matched. You can Check.")
 
     
     def bet(self):
@@ -261,7 +261,7 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
         try:
             raise_amount = int(self.bet_entry.get())
         except ValueError:
-            print("Please enter a valid whole number to bet.")
+            messagebox.showinfo("", "Please enter a valid whole number to bet.")
             return
 
         if raise_amount > 0:
