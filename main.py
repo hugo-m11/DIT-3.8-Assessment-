@@ -189,6 +189,7 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
     def player_draw_card(self):
         player = self.players[self.current_player]
         player.draw()
+        self.draw_card_button.config(state='disabled')
         self.update_player_display() 
 
     def discard_selected(self):
@@ -205,17 +206,28 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
             player.discard(index_to_discard) 
             
             #refresh the screen so the discarded card disappears
+
+            self.discard_button.config(state='disabled')
             self.update_player_display()
 
     def fold(self):
         player = self.players[self.current_player]
         player.has_folded = True
-        player.clear_hand() # Send their cards to the discard pile 
+        player.clear_hand() # Send their cards to the discard pile
+        self.bet_button.config(state='disabled')
+        self.fold_button.config(state='disabled')
+        self.check_button.config(state='disabled')
+        self.call_button.config(state='disabled') 
         self.next_player()
 
     
     def check(self):
         player = self.players[self.current_player]
+
+        self.bet_button.config(state='disabled')
+        self.fold_button.config(state='disabled')
+        self.check_button.config(state='disabled')
+        self.call_button.config(state='disabled')
         
         if player.current_bet == self.current_highest_bet:
             #legal move, proceed to next player
@@ -233,6 +245,13 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
         if self.players[self.current_player].has_folded:
             self.next_player() #recursively call to skip to the next
             return
+        
+        self.draw_card_button.config(state='normal')
+        self.discard_button.config(state='normal')
+        self.bet_button.config(state='normal')
+        self.fold_button.config(state='normal')
+        self.check_button.config(state='normal')
+        self.call_button.config(state='normal')
             
         self.update_player_display()
 
@@ -247,6 +266,10 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
                 player.credits -= amount_to_call
                 self.pot += amount_to_call
                 player.current_bet = self.current_highest_bet
+                self.bet_button.config(state='disabled')
+                self.fold_button.config(state='disabled')
+                self.check_button.config(state='disabled')
+                self.call_button.config(state='disabled')
                 self.next_player()
             else:
                 messagebox.showinfo("", "Not enough credits to call!")
