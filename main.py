@@ -96,26 +96,23 @@ class Mainloop:
 
         #what is displayed in the rules section 
         self.display_rules.configure(state = 'normal')
-        self.display_rules.insert(END, """Step 1:
-Choose a dealer. The person to the right of the dealer puts a blind into the hand pot. (In a two player game this would always be the dealer.) The blind is a previously agreed upon amount which must be paid at the start of each hand. The dealer rotates to the player on the left at the end of each round. The purpose of the blind is to ensure that there is always something to win in the hand pot, even if nobody bets.
+        self.display_rules.insert(END, """
                                   
 —-----------------------------------------------------------
                                   
 Step 2:
-The dealer deals two cards to each player.
+The deal two cards to each player.
                                   
 —-----------------------------------------------------------
                                   
 Step 3:
 After the cards are dealt, you begin the betting round of the hand. Each player, starting with the player to the left of the dealer and continuing clockwise takes turns to Bet, Call, Check, Raise, or Fold their hand much like in Poker:
                                   
-Bet, If no one has yet placed a starting bet you may call bet and place an amount of Credits in front of you (septet from both your stash of credits and the pots for easy counting.)
+Bet, If no one has yet placed a starting bet you may call bet and place an amount of Credits
                                   
 Call, You may call to equal the highest bet.
                                   
 Check, If no one has yet placed the starting bet or if your current bet is equal to the highest bet you may call check. (When checking, a player declines to make a bet, but wishes to keep their cards and continue playing.
-                                  
-Raise, if a player raises they're matching and increasing the current bet. (If a player raises the other players will continue around the table and choose to either call, check the new bet or fold.
                                   
 Fold, If a player folds they believe there is no chance of winning and forfeit the hand. (they must discard their cards facedown and anything they had bet goes into the hand pot.)
                                   
@@ -130,21 +127,14 @@ Drawing a card from the top of the deck.
                                   
 Trade out one card (discard a card then draw the top card.)
                                   
-Do nothing (stand.)
-                                  
-Alderaan (calling the game.)
-                                  
-(By calling Alderaan you think you have the hand closest to -23 or 23 all players who haven't finished the trading round may do so then cards are revealed and you move to the Show Down phase.)
+Do nothing (stand.)                               
                                   
 —--------------------------------------------------------
                                  
 Step 5:
-The final step is the dice round. The dealer roles two dice, if those dice land on different symbols/numbers then nothing happens. If both dice land on the same symbol/number “the shift“ commences. All players' cards are re-shuffle into the deck along with the discard pile. Each player is then dealt the same amount of cards they had before “The Shift”.
-(These steps are repeated in order over & over until someone calls Alderaan during the trading round [step number 4.])
-The Show Down
                                   
 All players reveal their hands. The winner is the person with the closest hand to 23 or -23. Negatives beat positive (-22 would beat 22 etc.) The winner of the hand claims the hand pot. If the winner had a True Sabacc (a perfect 23 or -23) then they would also claim the Sabacc pot.
-If a player's final hand is 0, more than 23, or less then -23 they “`bomb out“ they must calculate what 10% of the hand pot would be then they pay that amount from their own stash into the Sabacc pot.)
+If a player's final hand is 0, more than 23, or less then -23 they “`bomb out“ 
 —---------------------------------------------------------
 """ + "\n")
         self.display_rules.configure(state = 'disabled')
@@ -262,7 +252,7 @@ If a player's final hand is 0, more than 23, or less then -23 they “`bomb out�
             active_players = [p for p in self.players if not p.has_folded]
             
             #checks that everyone has had two turns 
-            if self.players_acted >= len(active_players * 2):
+            if self.players_acted >= len(active_players * 3):
                 
                 #
                 self.check_winners()
