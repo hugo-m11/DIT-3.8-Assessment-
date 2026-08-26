@@ -33,7 +33,7 @@ class Mainloop:
 
         #title screen 
         self.title_label = Label(self.main_frame, text="| Sabacc |", font=("Arial", 16))
-        self.title_label.grid(row=0, columns=3, pady=5)
+        self.title_label.grid(row=0, column=0, pady=5)
 
         #button that takse you to the rules 
         self.rules_button = Button(self.main_frame,text="| See Rules |", command=lambda: self.switch_frame_rule(self.rule_screen_frame))
@@ -53,7 +53,7 @@ class Mainloop:
 
         #button that stars a new game 
         self.new_game_button = Button(self.main_frame, text = "| Start Game |", command=self.start_game)
-        self.new_game_button.grid(row=2, columns=3, pady=5)
+        self.new_game_button.grid(row=2, column=0, pady=5)
 
         #sets up the screen that displays individual players 
         self.player_label = Label(self.game_frame, text="", font=("Arial", 16))
@@ -148,11 +148,13 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
         self.main_frame.grid_forget()
         self.rule_screen_frame.grid_forget()
         frame.grid()
+        #centres everyhitng 
+        frame.place(relx=0.5, rely=0.5, anchor='center')
 
         #method for starting games 
     def start_game(self):
         #creates four players 
-        self.players = card.create_players(4)
+        self.players = card.create_players(2)
         #deals the starting hands 
         card.deal_starting_hands(self.players)
         self.current_player = 0
