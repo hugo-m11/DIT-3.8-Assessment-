@@ -143,13 +143,14 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
 
         self.switch_frame_rule(self.main_frame)
        
-       #method for switching frames 
     def switch_frame_rule(self, frame):
-        self.main_frame.grid_forget()
-        self.rule_screen_frame.grid_forget()
-        frame.grid()
-        #centres everyhitng 
+      
+        self.main_frame.place_forget()
+        self.rule_screen_frame.place_forget()
+        self.game_frame.place_forget()
+        
         frame.place(relx=0.5, rely=0.5, anchor='center')
+
 
         #method for starting games 
     def start_game(self):
