@@ -155,7 +155,7 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
         #method for starting games 
     def start_game(self):
         #creates four players 
-        self.players = card.create_players(2)
+        self.players = card.create_players(4)
         #deals the starting hands 
         card.deal_starting_hands(self.players)
         self.current_player = 0
@@ -315,10 +315,10 @@ If a player's final hand is 0, more than 23, or less then -23 they â€œ`bomb outâ
                    #logs that a player has made a move, when all make a move betting phase ends 
                     self.players_acted += 1 
             
-                #checks if the phase is over, if not move to next player 
-                if not self.check_betting_end():
-                    self.next_player()
-                #message explaining why they cannot do what they did 
+                    #checks if the phase is over, if not move to next player 
+                    if not self.check_betting_end():
+                        self.next_player()
+                    #message explaining why they cannot do what they did 
                 else:
                     messagebox.showinfo("", "not enough credits to call")
             #same as above 
